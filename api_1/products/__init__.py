@@ -1,0 +1,1 @@
+from .dependencies import get_product_by_id
