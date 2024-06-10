@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import crud
-from core.models import db_helper
+from backend.core.models import db_helper
 from .shemas import Product, ProductCreate, ProductUpdate, ProductUpdatePartial
 from .dependencies import get_product_by_id
 

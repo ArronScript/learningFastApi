@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Annotated
 
 from . import crud
-from core.models import db_helper
+from backend.core.models import db_helper
 from .shemas import Product
 
 
