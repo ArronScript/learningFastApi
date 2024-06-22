@@ -1,5 +1,7 @@
 import base64
 
+from fastapi import HTTPException
+
 from typing import Tuple, Type
 
 from sqlalchemy import select, Result
@@ -34,10 +36,17 @@ class DatabaseUser:
 # -> Type[User] | None
     @staticmethod
     async def get_user(session: AsyncSession, login: str, password: str):
-        statement = select(User).order_by(User.username)
-        result: Result = await session.execute(statement)
+        result = await session.execute(select(User).where(User.username == login))
+        user = result.scalars().first()
+        if user:
+            if PasswordCoding.decode_password(user.password) == password:
+                return {'user': user.__dict__}
+        else:
+            raise HTTPException(status_code=401, detail='Unauthorized')
 
-        print(result.all())
+        # result: Result = await session.execute(statement)
+        #
+        # print(result.first()[0].__dict__)
 
 
 

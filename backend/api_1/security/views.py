@@ -41,6 +41,8 @@ async def authenticate_user(username: str, password: str,
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
 
+    return {'username' : username,
+            'password': password}
     # if not is_password_correct:
     #     raise HTTPException(status_code=400, detail="Incorrect username or password")
     #
