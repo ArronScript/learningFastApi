@@ -4,6 +4,8 @@ from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 
 from backend.api_1.security import UserCreate
+from backend.api_1.security import utils
+
 from backend.core.models import db_helper
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -28,14 +30,15 @@ async def register_user(username: str,
                         ):
     user_in = UserCreate(username=username, password=password,
                          email=email, full_name=full_name)
-    print(user_in.__dict__)
     await DatabaseUser.add_user(session, user_in)
     return {"user": user_in.password}
 
 
-@security_router.post("/token")
+@security_router.post("/login")
 async def authenticate_user(username: str, password: str,
                             session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
+
+
     user = await DatabaseUser.get_user(session=session, login=username, password=password)
 
     if not user:
@@ -44,7 +47,3 @@ async def authenticate_user(username: str, password: str,
     return {'username' : username,
             'password': password}
     # if not is_password_correct:
-    #     raise HTTPException(status_code=400, detail="Incorrect username or password")
-    #
-    # jwt_token = create_jwt_token({"sub": user.password})
-    # return {"access_token": jwt_token, "token_type": "bearer"}
